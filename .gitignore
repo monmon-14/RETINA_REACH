@@ -1,0 +1,32 @@
+# Python virtual environment
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment secrets
+.env
+.env.local
+
+# Large model weights & temp files
+temp_weights/
+*.pth
+*.pt
+*.onnx
+*.zip
+*.tar.gz
+
+# Streamlit logs
+.streamlit/
+
+# OS metadata
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
