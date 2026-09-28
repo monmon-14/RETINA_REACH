@@ -8,8 +8,13 @@ Pure clinical question-answering and UiPath robotic process automation.
 
 import streamlit as st
 from typing import Dict, Any, Optional
-from dr_clinical_knowledge import ClinicalEyeAssistant
-from uipath_bridge import UiPathBridge
+
+try:
+    from .dr_clinical_knowledge import ClinicalEyeAssistant
+    from .uipath_bridge import UiPathBridge
+except ImportError:
+    from dr_clinical_knowledge import ClinicalEyeAssistant
+    from uipath_bridge import UiPathBridge
 
 
 def init_chat_session():

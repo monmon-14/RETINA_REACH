@@ -5,7 +5,9 @@ Automated verification tests for the Ophthalmic Technician Clinical Assistant
 and UiPath RPA Dispatcher.
 """
 
+import os
 import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dr_clinical_knowledge import ClinicalEyeAssistant
 from uipath_bridge import UiPathBridge
 

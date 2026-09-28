@@ -1,85 +1,85 @@
-# 👁️ RetinaCam - Fundus Eye Image Grad-CAM Visualization
+# 👁️ RetinaReach — Diabetic Retinopathy Diagnostic AI & Explainability Platform
 
-RetinaCam is a deep learning explainability tool designed for retinal fundus imaging. It generates Grad-CAM and Grad-CAM++ activation maps to visualize what anatomical and pathological features (e.g., optic cup, macula/fovea, hard exudates, hemorrhages, and retinal vasculature) a convolutional neural network focuses on when analyzing fundus images.
+RetinaReach is a deep learning web application for ophthalmology, specializing in **Diabetic Retinopathy (DR)** detection, lesion localization, and clinical explainability using retinal fundus and OCT imagery.
 
 ---
 
-## 🚀 Quick Start
+## 🌟 Key Capabilities
 
-### 1. Launch with One Click
-Double-click the **`run_app.bat`** file in this folder. It will launch the Streamlit web dashboard in your browser.
+1. **Multimodal Retinal Disease Detection**:
+   - Deep neural network backbones (ResNet50, ResNet18, EfficientNet-B0, MobileNetV3-Large).
+   - Multi-class diagnostic classification: *Normal*, *Diabetic Retinopathy (Mild, Moderate, Severe, PDR)*, *Glaucoma*, *AMD / Drusen*, and *Retinal Vasculopathy*.
 
-### 2. Or Launch via Terminal
+2. **Visual Explainability (Grad-CAM & Grad-CAM++)**:
+   - Highlights fine retinal lesions (microaneurysms, hard exudates, hemorrhages, neovascularization, and optic disc cupping).
+   - Multi-colormap overlay rendering with adjustable transparency ($\alpha$) and activation thresholding.
+   - What-If Diagnostic Exploration across all clinical classes.
+
+3. **💬 Ophthalmic Technician Co-Pilot (UiPath RPA)** *(Located in `/chatbot`)*:
+   - Dedicated clinical assistant for technicians and mobile screening staff.
+   - Answers questions on ETDRS staging, the international 4:2:1 rule, OCT biomarkers (CST, IRF, SRF, DRIL), and camera acquisition troubleshooting (glare, blur, small pupils).
+   - One-click hospital referral automation via **UiPath Orchestrator Queues**.
+
+---
+
+## 🏗️ Repository Structure
+
+```
+RETINA_REACH/
+├── app.py                      # Main Streamlit Web Application
+├── models.py                   # Deep learning architectures & model builder
+├── gradcam_engine.py           # Grad-CAM and Grad-CAM++ implementation
+├── cli.py                      # Command-line interface for batch inference
+├── test_pipeline.py            # Vision pipeline automated test suite
+├── samples/                    # Sample retinal fundus photographs
+│
+├── chatbot/                    # 💬 Ophthalmic Technician Chatbot Feature
+│   ├── __init__.py             # Python package initializer
+│   ├── dr_clinical_knowledge.py# Clinical knowledge base & symptom guide
+│   ├── uipath_bridge.py        # UiPath Orchestrator REST client & demo runner
+│   ├── chatbot_ui.py           # Streamlit Chatbot component & RPA panel
+│   ├── standalone_app.py       # Standalone launcher for just the chatbot
+│   ├── test_chatbot.py         # Chatbot & UiPath automated tests
+│   └── UIPATH_INTEGRATION_GUIDE.md # UiPath setup & hackathon pitch guide
+│
+├── requirements.txt            # Project dependencies
+├── run_app.bat                 # 1-click Windows application launcher
+└── .gitignore                  # Git ignore rules (excludes venv, weights, cache)
+```
+
+---
+
+## 🚀 Getting Started
+
+### 1. Installation
+Clone the repository and install dependencies:
 ```bash
-# Activate the environment
-cd fundus_gradcam_app
-.\venv\Scripts\activate
+git clone https://github.com/monmon-14/RETINA_REACH.git
+cd RETINA_REACH
+pip install -r requirements.txt
+```
 
-# Run the Streamlit web app
+### 2. Run the Main Web Application
+```bash
 streamlit run app.py
 ```
+Or double-click `run_app.bat` on Windows.
 
-### 3. Command-Line Interface (CLI)
-You can also generate Grad-CAM overlays directly from the terminal without opening the browser:
+### 3. Run the Chatbot Standalone (Optional)
+If you wish to test only the technician chatbot:
 ```bash
-.\venv\Scripts\python.exe cli.py --image samples/sample_diabetic_retinopathy.jpg --output output_cam.jpg
+streamlit run chatbot/standalone_app.py
 ```
-Additional options:
+
+---
+
+## 🧪 Verification & Testing
+
+Run the automated test suites:
 ```bash
-# Specify target class (e.g., class 1: Diabetic Retinopathy, class 2: Glaucoma)
-.\venv\Scripts\python.exe cli.py --image my_eye.png --target-class 1 --colormap Turbo --alpha 0.65
+# Test the AI Grad-CAM vision pipeline
+python test_pipeline.py
 
-# Use a specific backbone (ResNet50, EfficientNet-B0, MobileNetV3-Large)
-.\venv\Scripts\python.exe cli.py --image my_eye.png --backbone EfficientNet-B0 --method gradcam++
-```
-
----
-
-## ✨ Features
-
-- **Multi-Backbone Support**: Choose between `ResNet50`, `ResNet18`, `EfficientNet-B0`, and `MobileNetV3-Large`.
-- **Target Layer Selection**: Dynamically inspect any convolutional layer (e.g., `layer4`, `layer3`, `features[-1]`).
-- **Grad-CAM & Grad-CAM++**: Grad-CAM++ utilizes higher-order gradient weighting to isolate small, distributed lesions like microaneurysms and hard exudates.
-- **Custom Model Weights**: Easily upload your own fine-tuned PyTorch checkpoint (`.pth` or `.pt`).
-- **Interactive Heatmap Controls**:
-  - Colormaps: `Jet`, `Turbo`, `Viridis`, `Inferno`, `Hot`, `Plasma`.
-  - Alpha blending transparency slider.
-  - Activation thresholding slider to eliminate background noise.
-  - Optional CLAHE contrast enhancement for fundus vasculature.
-- **Side-by-Side Diagnostic View**:
-  1. Original Fundus Photograph
-  2. Pure Activation Heatmap
-  3. Blended Diagnostic Overlay
-- **Retinal Feature Insights**: Displays clinical context explaining what landmarks (optic disc, macula, blood vessels, exudates) the model is evaluating.
-- **One-Click Export**: Download high-resolution Grad-CAM overlays and standalone heatmaps.
-- **Sample Gallery**: Includes pre-loaded synthetic fundus cases (Normal, Diabetic Retinopathy, Glaucoma, AMD) for immediate evaluation.
-
----
-
-## 🔬 Retinal Disease Diagnostic Classes
-
-| Index | Condition | Typical Grad-CAM Attention Region |
-|---|---|---|
-| **0** | Normal Retinal Fundus | Symmetrical physiological landmarks: Optic disc margins, healthy foveal avascular zone (FAZ). |
-| **1** | Diabetic Retinopathy | Microvascular lesions: hard exudates, microaneurysms, blot hemorrhages along retinal arcades. |
-| **2** | Glaucoma | Optic nerve head (ONH), neuroretinal rim thinning, elevated cup-to-disc ratio (CDR > 0.6). |
-| **3** | Age-Related Macular Degeneration (AMD) | Central macula & fovea, confluent drusen deposits, geographic atrophy. |
-| **4** | Retinal Vasculopathy | Main branch arterioles, arteriovenous nicking, vascular caliber changes. |
-
----
-
-## 📁 Project Structure
-
-```
-fundus_gradcam_app/
-├── app.py                  # Interactive Streamlit Web Dashboard
-├── cli.py                  # Command-line interface for batch/terminal execution
-├── gradcam_engine.py       # Core Grad-CAM and Grad-CAM++ implementation & hooks
-├── models.py               # Retinal classification backbones & layer introspection
-├── create_sample_fundus.py # Generates demonstration fundus images
-├── test_pipeline.py        # Automated test verification suite
-├── requirements.txt        # Python package dependencies
-├── run_app.bat             # 1-click Windows launcher
-├── samples/                # Sample fundus images (Normal, DR, Glaucoma, AMD)
-└── venv/                   # Python 3.12 isolated virtual environment
+# Test the Technician Chatbot & UiPath bridge
+python chatbot/test_chatbot.py
 ```
